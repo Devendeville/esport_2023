@@ -21,32 +21,8 @@ try {
 <body>
 	
 		<h1>Connexion</h1>
-		<div class="formulaire">
+		<div class="connexion">
 		<form method="POST">
-			<p>
-				<label for="log">Pseudo en jeu</label>
-				<input type="text" id="log" name="u_name" required />
-			</p>
-
-			<p>
-				<label for="mail">Mail</label>
-				<input type="email" id="mail" name="u_mail" required />
-			</p>
-
-			<p>
-				<label for="mdp">Mot de passe</label>
-				<input type="password" id="mdp" name="u_mdp" required />
-			</p>
-
-			<!-- bouton enregistrer -->
-			<p>
-				<input type="submit" name="Connection" value="Sign In" />
-			</p>
-
-			<!-- Redirection vers mot de passe oublié -->
-			<a href="http://localhost/projet_esport/Mdp_oublie.php">Mot de passe oublié</a>
-		</form>
-		</div>
 		<?php
 		if (isset($_POST["Connection"])) {
 			$name = $_POST["u_name"];
@@ -59,15 +35,12 @@ try {
             $rq_connexion->bindParam(':name', $name, PDO::PARAM_STR);
             $rq_connexion->execute();
 			$user = $rq_connexion->fetch(PDO::FETCH_ASSOC);
-            var_dump($user['mdp_joueur']);
-            var_dump(password_hash($user['mdp_joueur'], PASSWORD_DEFAULT));
-            var_dump(password_verify($mdp, $user['mdp_joueur']));
 			if (password_verify($mdp, $user['mdp_joueur'])) {
 				// Authentification réussie
 				$_SESSION['id_joueur'] = $user['id_joueur'];
 				$_SESSION['id_equipe'] = $user['id_equipe_joueur'];
-				// Redirection vers une page sécurisée, par exemple
-				header("Location: page_securisee.html");
+				// Redirection vers une page inscription, par exemple
+				header("Location: Inscription2.php");
 				exit();
 			} else {
 				// Identifiants incorrects. Veuillez réessayer
@@ -76,7 +49,50 @@ try {
 		}
 
 		?>
-	
+			<p>
+				<label for="log">Pseudo en jeu</label>
+				<input type="text" id="log" name="u_name" placeholder = "Pseudo en jeu" required />
+			</p>
+
+			<p>
+				<label for="mail">E-mail</label>
+				<input type="email" id="mail" name="u_mail" placeholder = "E-mail"required />
+			</p>
+
+			<p>
+				<label for="mdp">Mot de passe</label>
+				<input type="password" id="mdp" name="u_mdp" placeholder = "Mot de passe"required />
+				<img src="red_eye.png" id="eye" onclick="changer()" width="20" height="20">
+			</p>
+
+			<!-- bouton enregistrer -->
+			<p>
+				<input type="submit" name="Connection" value="Sign In" />
+			</p>
+
+			<!-- Redirection vers mot de passe oublié -->
+			<a href="http://localhost/esport_2023/Mot_de_passe_oublié.php">Mot de passe oublié</a>
+		</form>
+		</div>
+		<script>
+            //L'oeil masqué
+            e=true;
+            function changer()
+            {
+                if(e)
+                {
+                    document.getElementById("mdp").setAttribute("type","text");
+                    document.getElementById("eye").src="green_eye.png";
+                    e=false;
+                }
+                else
+                {
+                    document.getElementById("mdp").setAttribute("type","password");
+                    document.getElementById("eye").src="red_eye.png";
+                    e=true;
+                }
+            }
+        </script>
 	<footer>
 <div class="footer-rl">
 		© Rocket Laon 2023 - L'eSport Rocket League du lycee Paul Claudel a Laon
